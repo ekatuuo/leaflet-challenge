@@ -4,36 +4,28 @@ console.log("working");
 // We create the tile layer that will be the background of our map.
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
-	maxZoom: 15,
+	maxZoom: 18,
 	accessToken: API_KEY
 });
 
 // We create the second tile layer that will be the background of our map.
 let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
-	maxZoom: 15,
-	accessToken: API_KEY
-});
-
-// We create a third tile layer that will be the background of our map.
-let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-	attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
-	maxZoom: 15,
+	maxZoom: 18,
 	accessToken: API_KEY
 });
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
 	center: [40.7, -94.5],
-	zoom: 4,
+	zoom: 3,
 	layers: [streets]
 });
 
 // Create a base layer that holds all three maps.
 let baseMaps = {
   "Streets": streets,
-  "Satellite": satelliteStreets,
-  "Dark": dark
+  "Satellite": satelliteStreets
 };
 
 // 1. Add a 3rd layer group for the major earthquake data.
@@ -43,7 +35,7 @@ let majorEarthquakes = new L.LayerGroup();
 
 // 2. Add a reference to the major earthquake group to the overlays object.
 let overlays = {
-  // "Tectonic Plates": tectonicplates,
+  "Tectonic Plates": tectonicplates,
   "Earthquakes": allEarthquakes,
   "Major Earthquakes": majorEarthquakes
 };
@@ -215,12 +207,10 @@ legend.onAdd = function() {
   d3.json("https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json").then(function(platedata) {
       // Adding our geoJSON data, along with style information, to the tectonicplates
       // layer.
-      L.geoJson(platedata,
-        //  {
-        // color: "#ff6500",
-        // weight: 2
-      // }
-      )
+      L.geoJson(platedata, {
+        color: "#ff6500",
+        weight: 2
+      })
       .addTo(tectonicplates);
 
       // Then add the tectonicplates layer to the map.
